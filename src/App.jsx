@@ -4,46 +4,10 @@ import axios from "axios";
 
 import ImageGallery from "./components/ImageGallery";
 import Searchbar from "./components/Searchbar";
+import Button from "./components/Button";
+import Modal from "./components/Modal";
 
 const API_KEY = "37276677-272c3b8b85cdae0973e03a6b6";
-
-const Button = ({ onClick }) => {
-  return (
-    <button type="button" className="Button" onClick={onClick}>
-      Load more
-    </button>
-  );
-};
-
-const Modal = ({ imageUrl, onClose }) => {
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.code === "Escape") {
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose]);
-
-  const handleClick = (event) => {
-    if (event.target === event.currentTarget) {
-      onClose();
-    }
-  };
-
-  return (
-    <div className="Overlay" onClick={handleClick}>
-      <div className="Modal">
-        <img src={imageUrl} alt="" />
-      </div>
-    </div>
-  );
-};
 
 const App = () => {
   const [query, setQuery] = useState("");
@@ -94,6 +58,19 @@ const App = () => {
 
     fetchImages();
   }, [query, page]);
+
+  const scrollDown = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    if (images.length > 0) {
+      scrollDown();
+    }
+  }, [images]);
 
   return (
     <div className="App">
